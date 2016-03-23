@@ -1,16 +1,13 @@
 class oraaud::params {
 
-  # params
-  $aud_server           = 'fsxopsx9999.fdc.fs.usda.gov'
-
-  # module params
-  # src_dir             : path to install files
-  $src_dir              = '/fslink/sysinfra/tivoli/itm630agent'
-  $dir_tmp              = '/tmp'
-  $itm_home             = '/opt/IBM/ITM'
-  $tar_file             = 'nameoffile.tar'
-  $tar_dir              = regsubst($tar_file, '\.tar$', '')
-  $script_file          = 'itm630lnxagt.tgz'
-  $script_dir           = regsubst($script_file, '\.tgz$', '')
+  # dir_src             : path to install files
+  $dir_src              = '/fslink/sysinfra/oracle/scripts/misc/auditing'
+  $dir_audit            = '/home/oracle/system/audit'
+  $script_audit         = 'install_ora_audit.sh'
+  $script_compare       = 'version_compare.sh'
+  $file_tar             = 'rn-ora_audit_nitc.tar'
+  $expect_package       = 'expect'
+  $expect_ensure        = 'present'
+  $db_user              = 'oracle'
 
 }
