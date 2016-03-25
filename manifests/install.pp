@@ -1,10 +1,9 @@
 class oraaud::install (
-
 ) inherits oraaud {
 
    case $::osfamily {
      'RedHat': {
-        if $::operatingsystemmajrelease >= 8 {
+        if $::operatingsystemmajrelease + 0 >= 8 {
           fail("Class['oraaud::install']: Unsupported operating system majrelease ${::operatingsystemmajrelease}")
         }
       }
@@ -18,48 +17,51 @@ class oraaud::install (
      name   => $expect_package,
    }
 
-   staging::deploy { '$file_tar':
-     source => '$dir_src/$file_tar',
+   staging::deploy { "$file_tar":
+     source => "$dir_src/$file_tar",
      target => '/',
      notify => [
        #File['/home/oracle/system/audit/install_ora_audit.sh'],
-       File['$dir_audit/$script_audit'],
+       File["$dir_audit/$script_audit"],
        #Exec["install_ora_audit.sh ${oraaud_stdin}"]
        Exec['compare_audit'],
      ],
-     unless => 'ls $dir_audit/scp_audit.sh',
+     #unless => "ls $dir_audit/scp_audit.sh",
+     unless => "ls $dir_audit/.audit_marker_late.txt",
    }
 
   #file {'/home/oracle/system/audit/install_ora_audit.sh':
-  file {'$dir_audit/$script_audit':
+  file {"$dir_audit/$script_audit":
     mode   => '0755',
     before => Exec['install_audit'],
   }
 
-  file {'$dir_audit/$script_compare':
+  file {"$dir_audit/$script_compare":
     mode   => '0755',
     before => Exec['compare_audit'],
   }
 
-  exec {'compare_audit':
-    command      => '$script_compare',
+  exec {'compare_audit': 
+    command      => "$script_compare",
     #path        => '/home/oracle/system/audit',
-    path         => '$dir_audit',
-    refreshonly  => true,
-    notify       => Exec['install_audit'],
+    #path        => "$dir_audit",
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
+    refreshonly => true,
+    notify      => Exec['install_audit'],
   }
 
   #exec {"install_ora_audit.sh ${oraaud_stdin}":
   exec {'install_audit':
-    command     => '$script_audit',
+    command     => "$script_audit",
     #path        => '/home/oracle/system/audit',
-    path        => '$dir_audit',
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
     refreshonly => true,
     notify      => Exec['cycledb'],
   }
 
   exec {'cycledb':
-    command     => 'for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done',
+    command     => 'sh -c for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done',
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin",
     refreshonly => true,
     user        => $db_user,
     notify      => Exec['marker_rm'],
@@ -67,6 +69,7 @@ class oraaud::install (
 
   exec {'marker_rm':
     command     => 'find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin",
     refreshonly => true,
     user        => $db_user,
     notify      => Exec['marker_touch'],
@@ -74,6 +77,7 @@ class oraaud::install (
 
   exec {'marker_touch':
     command     => 'touch /home/oracle/system/audit/.audit_marker_late.txt /home/oracle/system/audit/.audit_marker_newer_pending.txt /home/oracle/system/audit/.audit_marker_newer.txt',
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin",
     refreshonly => true,
     user        => $db_user,
     notify      => Exec['service_config'],
@@ -81,6 +85,7 @@ class oraaud::install (
 
   exec {'service_config':
     command     => '/home/oracle/system/audit/config_oraaud_OS_service.sh',
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin",
     refreshonly => true,
   }
 
