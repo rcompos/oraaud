@@ -1,4 +1,5 @@
 class oraaud::install (
+
 ) inherits oraaud {
 
    case $::osfamily {
@@ -40,12 +41,12 @@ class oraaud::install (
     before => Exec['compare_audit'],
   }
 
-  exec {'compare_audit': 
+  exec {'compare_audit':
     command      => '$script_compare',
     #path        => '/home/oracle/system/audit',
-    path        => '$dir_audit',
-    refreshonly => true,
-    notify      => Exec['install_audit'],
+    path         => '$dir_audit',
+    refreshonly  => true,
+    notify       => Exec['install_audit'],
   }
 
   #exec {"install_ora_audit.sh ${oraaud_stdin}":
@@ -58,7 +59,7 @@ class oraaud::install (
   }
 
   exec {'cycledb':
-    command     => "for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed 's|[0-9]$||'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done",
+    command     => 'for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done',
     refreshonly => true,
     user        => $db_user,
     notify      => Exec['marker_rm'],
