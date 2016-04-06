@@ -71,7 +71,7 @@ class oraaud::install (
   }
 
   exec {'marker_touch':
-    command     => 'touch $dir_audit/.audit_marker_late.txt /home/oracle/system/audit/.audit_marker_newer_pending.txt /home/oracle/system/audit/.audit_marker_newer.txt',
+    command     => 'touch $dir_audit/.audit_marker_late.txt $dir_audit/.audit_marker_newer_pending.txt $dir_audit/.audit_marker_newer.txt',
     path        => '$path_default',
     refreshonly => true,
     user        => $db_user,
