@@ -17,22 +17,22 @@ class oraaud::install (
      name   => "$expect_package",
    }
 
-  staging::deploy { '$file_tar':
-    source => '$dir_src/$file_tar',
-    target => '/',
+  staging::deploy { "$file_tar":
+    source => "$dir_src/$file_tar",
+    target => "/",
     notify => [
-      File['$dir_audit/$script_audit'],
-      Exec['compare_audit'],
+      File["$dir_audit/$script_audit"],
+      Exec["compare_audit"],
     ],
-    unless => 'ls $dir_audit/.audit_marker_late.txt',
+    unless => "ls $dir_audit/.audit_marker_late.txt",
   }
 
-  file {'$dir_audit/$script_audit':
-    mode   => '0755',
+  file {"$dir_audit/$script_audit":
+    mode   => "0755",
     before => Exec['install_audit'],
   }
 
-  file {'$dir_audit/$script_compare':
+  file {"$dir_audit/$script_compare":
     mode   => '0755',
     before => Exec['compare_audit'],
   }
