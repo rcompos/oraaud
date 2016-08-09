@@ -27,9 +27,9 @@ class oraaud::install (
     unless => "ls $dir_audit/.audit_marker_late.txt",
   }
 
-  file { "$script_cycledb":
+  file { "$dir_audit/$script_cycledb":
+    ensure => file,
     source => "puppet:///modules/profile/oracle/oracle_audit/${script_cycledb}",
-    target => "$dir_audit",
     mode   => 'ug+x',
     before => Exec['cycledb'],
   }
