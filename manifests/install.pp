@@ -31,6 +31,8 @@ class oraaud::install (
     ensure => file,
     source => "puppet:///modules/oraaud/${script_cycledb}",
     mode   => 'ug+x',
+    owner  => "$db_user",
+    group  => "$db_group",
     before => Exec['cycledb'],
   }
 

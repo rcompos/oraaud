@@ -11,5 +11,6 @@ class oraaud::params {
   $expect_package       = 'expect'
   $expect_ensure        = 'present'
   $db_user              = 'oracle'
+  $db_group             = 'oinstall'
 
 }
