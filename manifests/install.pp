@@ -29,7 +29,7 @@ class oraaud::install (
 
   file { "$dir_audit/$script_cycledb":
     ensure => file,
-    source => "puppet:///modules/profile/oracle/oracle_audit/${script_cycledb}",
+    source => "puppet:///modules/oraaud/${script_cycledb}",
     mode   => 'ug+x',
     before => Exec['cycledb'],
   }
