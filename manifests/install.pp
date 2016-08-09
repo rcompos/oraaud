@@ -22,9 +22,19 @@ class oraaud::install (
     target => "/",
     notify => [
       File["$dir_audit/$script_audit"],
-      Exec["compare_audit"],
+      Exec['compare_audit'],
     ],
     unless => "ls $dir_audit/.audit_marker_late.txt",
+  }
+
+  file { "$script_cycledb":
+    source => "puppet:///modules/profile/oracle/oracle_audit/${script_cycledb}",
+    target => "$dir_audit",
+    mode   => 'ug+x',
+    notify => [
+      Exec['cycledb'],
+    ],
+    unless => "$dir_audit/$script_cycledb",
   }
 
   file {"$dir_audit/$script_audit":
@@ -55,8 +65,9 @@ class oraaud::install (
   }
 
   exec {'cycledb':
-    command     => '/bin/sh -c for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done',
-    path        => '$path_default',
+    #command     => "/bin/sh -c for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done",
+    command     => "$dir_audit/$script_cycledb",
+    path        => "$path_default:$dir_audit",
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['marker_rm'],
@@ -64,7 +75,7 @@ class oraaud::install (
 
   exec {'marker_rm':
     command     => 'find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
-    path        => '$path_default',
+    path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['marker_touch'],
@@ -72,7 +83,7 @@ class oraaud::install (
 
   exec {'marker_touch':
     command     => 'touch $dir_audit/.audit_marker_late.txt $dir_audit/.audit_marker_newer_pending.txt $dir_audit/.audit_marker_newer.txt',
-    path        => '$path_default',
+    path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['service_config'],
