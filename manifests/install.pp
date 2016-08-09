@@ -47,7 +47,7 @@ class oraaud::install (
   }
 
   exec {'compare_audit': 
-    command      => "$script_compare",
+    command      => "$dir_audit/$script_compare",
     #path        => "/home/oracle/system/audit",
     #path        => "$dir_audit",
     path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
@@ -56,7 +56,7 @@ class oraaud::install (
   }
 
   exec {'install_audit':
-    command     => "$script_audit",
+    command     => "$dir_audit/$script_audit",
     #path        => "/home/oracle/system/audit",
     path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
     refreshonly => true,
@@ -73,7 +73,7 @@ class oraaud::install (
   }
 
   exec {'marker_rm':
-    command     => 'find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
+    command     => '/bin/find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
     path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
@@ -81,7 +81,7 @@ class oraaud::install (
   }
 
   exec {'marker_touch':
-    command     => 'touch $dir_audit/.audit_marker_late.txt $dir_audit/.audit_marker_newer_pending.txt $dir_audit/.audit_marker_newer.txt',
+    command     => '/bin/touch $dir_audit/.audit_marker_late.txt $dir_audit/.audit_marker_newer_pending.txt $dir_audit/.audit_marker_newer.txt',
     path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
