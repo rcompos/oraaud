@@ -32,7 +32,6 @@ class oraaud::install (
     target => "$dir_audit",
     mode   => 'ug+x',
     before => Exec['cycledb'],
-    unless => "$dir_audit/$script_cycledb",
   }
 
   file {"$dir_audit/$script_audit":
