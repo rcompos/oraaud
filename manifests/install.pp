@@ -27,13 +27,22 @@ class oraaud::install (
     unless => "ls $dir_audit/.audit_marker_late.txt",
   }
 
-  file { "$dir_audit/$script_cycledb":
+  file { "$dir_audit/$script_cycle_db":
     ensure => file,
-    source => "puppet:///modules/oraaud/${script_cycledb}",
+    source => "puppet:///modules/oraaud/$script_cycle_db",
     mode   => 'ug+x',
     owner  => "$db_user",
     group  => "$db_group",
-    before => Exec['cycledb'],
+    before => Exec['cycle_db'],
+  }
+
+  file { "$dir_audit/$script_marker_rm":
+    ensure => file,
+    source => "puppet:///modules/oraaud/$script_marker_rm",
+    mode   => 'ug+x',
+    owner  => "$db_user",
+    group  => "$db_group",
+    before => Exec['marker_rm'],
   }
 
   file {"$dir_audit/$script_audit":
@@ -60,12 +69,12 @@ class oraaud::install (
     #path        => "/home/oracle/system/audit",
     path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
     refreshonly => true,
-    notify      => Exec['cycledb'],
+    notify      => Exec['cycle_db'],
   }
 
-  exec {'cycledb':
+  exec {'cycle_db':
     #command     => "/bin/sh -c for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $DB_NAME; done",
-    command     => "$dir_audit/$script_cycledb",
+    command     => "$dir_audit/$script_cycle_db",
     path        => "$path_default:$dir_audit",
     refreshonly => true,
     user        => "$db_user",
@@ -74,8 +83,8 @@ class oraaud::install (
 
   exec {'marker_rm':
     #command     => '/bin/find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
-    command     => "rmlist=`/bin/find /opt/oracle/admin/*/adump -name \"*aud\" -mtime +2`; if [[ \$rmlist ]]; then echo \$rmlist | xargs rm",
-    path        => "$path_default",
+    command     => "$dir_audit/$script_marker_rm",
+    path        => "$path_default:$dir_audit",
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['marker_touch'],
