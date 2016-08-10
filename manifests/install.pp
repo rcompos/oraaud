@@ -73,7 +73,8 @@ class oraaud::install (
   }
 
   exec {'marker_rm':
-    command     => '/bin/find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
+    #command     => '/bin/find /opt/oracle/admin/*/adump -name "*aud" -mtime +2 | xargs rm',
+    command     => "rmlist=`/bin/find /opt/oracle/admin/*/adump -name \"*aud\" -mtime +2`; if [[ \$rmlist ]]; then echo \$rmlist | xargs rm",
     path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
