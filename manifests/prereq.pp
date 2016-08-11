@@ -22,7 +22,7 @@ class oraaud::prereq (
     mode   => 'ug+x',
     owner  => "$db_user",
     group  => "$db_group",
-    before => Exec['cycle_db'],
+    #before => Exec['cycle_db'],
   }
 
   file { "$dir_audit/$script_marker_rm":
@@ -31,12 +31,12 @@ class oraaud::prereq (
     mode   => 'ug+x',
     owner  => "$db_user",
     group  => "$db_group",
-    before => Exec['marker_rm'],
+    #before => Exec['marker_rm'],
   }
 
   file {"$dir_audit/$script_audit":
     mode   => "0755",
-    before => Exec['install_audit'],
+    #before => Exec['install_audit'],
   }
 
   #file {"$dir_audit/$script_compare":
