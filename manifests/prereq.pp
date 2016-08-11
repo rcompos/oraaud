@@ -13,7 +13,7 @@ class oraaud::prereq (
       File["$dir_audit/$script_audit"],
       #Exec['compare_audit'],
     ],
-    unless => "ls $dir_audit/.audit_marker_late.txt",
+    #unless => "ls $dir_audit/.audit_marker_late.txt",
   }
 
   file { "$dir_audit/$script_cycle_db":
