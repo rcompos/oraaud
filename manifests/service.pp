@@ -14,7 +14,6 @@ class oraaud::service (
     path        => "$path_default:$dir_audit",
     refreshonly => true,
     user        => "$db_user",
-    unless      => '/bin/ps -ef | /bin/grep -v ASM | /bin/grep [o]ra_pmon',
     notify      => Exec['marker_rm'],
     #subscribe   => File["$dir_audit/$script_cycle_db"],
   }
