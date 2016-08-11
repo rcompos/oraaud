@@ -33,7 +33,6 @@ class oraaud::service (
     path        => "$path_default",
     refreshonly => true,
     user        => "$db_user",
-    notify      => Exec['service_config'],
   }
 
 
