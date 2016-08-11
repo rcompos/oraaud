@@ -12,57 +12,14 @@ class oraaud::install (
   #     }
   # }
 
-   package { "$expect_package":
-     ensure => "$expect_ensure",
-     name   => "$expect_package",
-   }
-
-  staging::deploy { "$file_tar":
-    source => "$dir_src/$file_tar",
-    target => "/",
-    notify => [
-      File["$dir_audit/$script_audit"],
-      Exec['compare_audit'],
-    ],
-    unless => "ls $dir_audit/.audit_marker_late.txt",
-  }
-
-  file { "$dir_audit/$script_cycle_db":
-    ensure => file,
-    source => "puppet:///modules/oraaud/$script_cycle_db",
-    mode   => 'ug+x',
-    owner  => "$db_user",
-    group  => "$db_group",
-    before => Exec['cycle_db'],
-  }
-
-  file { "$dir_audit/$script_marker_rm":
-    ensure => file,
-    source => "puppet:///modules/oraaud/$script_marker_rm",
-    mode   => 'ug+x',
-    owner  => "$db_user",
-    group  => "$db_group",
-    before => Exec['marker_rm'],
-  }
-
-  file {"$dir_audit/$script_audit":
-    mode   => "0755",
-    before => Exec['install_audit'],
-  }
-
-  file {"$dir_audit/$script_compare":
-    mode   => '0755',
-    before => Exec['compare_audit'],
-  }
-
-  exec {'compare_audit': 
-    command      => "$dir_audit/$script_compare",
-    #path        => "/home/oracle/system/audit",
-    #path        => "$dir_audit",
-    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
-    refreshonly => true,
-    notify      => Exec['install_audit'],
-  }
+  #exec {'compare_audit': 
+  #  command      => "$dir_audit/$script_compare",
+  #  #path        => "/home/oracle/system/audit",
+  #  #path        => "$dir_audit",
+  #  path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
+  #  refreshonly => true,
+  #  notify      => Exec['install_audit'],
+  #}
 
   exec {'install_audit':
     command     => "$dir_audit/$script_audit",
@@ -79,6 +36,7 @@ class oraaud::install (
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['marker_rm'],
+    subscribe   => File["$dir_audit/$script_cycle_db"],
   }
 
   exec {'marker_rm':
@@ -96,12 +54,6 @@ class oraaud::install (
     refreshonly => true,
     user        => "$db_user",
     notify      => Exec['service_config'],
-  }
-
-  exec {'service_config':
-    command     => "/home/oracle/system/audit/config_oraaud_OS_service.sh",
-    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin",
-    refreshonly => true,
   }
 
 }
