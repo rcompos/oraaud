@@ -11,7 +11,7 @@ class oraaud::prereq (
     target => "/",
     notify => [
       File["$dir_audit/$script_audit"],
-      Exec['compare_audit'],
+      #Exec['compare_audit'],
     ],
     unless => "ls $dir_audit/.audit_marker_late.txt",
   }
@@ -39,9 +39,9 @@ class oraaud::prereq (
     before => Exec['install_audit'],
   }
 
-  file {"$dir_audit/$script_compare":
-    mode   => '0755',
-    before => Exec['compare_audit'],
-  }
+  #file {"$dir_audit/$script_compare":
+  #  mode   => '0755',
+  #  before => Exec['compare_audit'],
+  #}
 
 }
