@@ -6,7 +6,7 @@ class oraaud::prereq (
      name   => "$expect_package",
    }
 
-  notify{"This is notice.":}
+  #notify{"This is notice.":}
   staging::deploy { "$file_tar":
     source => "$dir_src/$file_tar",
     target => "/",

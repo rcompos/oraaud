@@ -25,7 +25,7 @@ class oraaud::install (
     command     => "$dir_audit/$script_audit",
     #path        => "/home/oracle/system/audit",
     path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:$dir_audit",
-    refreshonly => true,
+    #refreshonly => true,
   }
 
 }
