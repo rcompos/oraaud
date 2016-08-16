@@ -13,5 +13,6 @@ class oraaud::params {
   $expect_ensure        = 'present'
   $db_user              = 'oracle'
   $db_group             = 'oinstall'
+  $scp_pw               = hiera('scp_pw',    undef)
 
 }
