@@ -21,6 +21,7 @@ class oraaud::install (
   #  notify      => Exec['install_audit'],
   #}
 
+  notify { "\$scp_pw: $scp_pw": }
   exec {'install_audit':
     command     => "$dir_audit/$script_audit",
     #path        => "/home/oracle/system/audit",
