@@ -35,10 +35,16 @@ class oraaud::prereq (
     #before => Exec['marker_rm'],
   }
 
+  file {"$dir_audit":
+    mode   => '0755',
+    before => File["$dir_audit/$script_audit"],
+  }
+
   file {"$dir_audit/$script_audit":
     mode   => "0755",
     #before => Exec['install_audit'],
   }
+
 
   #file {"$dir_audit/$script_compare":
   #  mode   => '0755',
