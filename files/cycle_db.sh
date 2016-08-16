@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -x
+. /home/oracle/.bash_profile
+
 for DB_NAME in $(/tmp/usfs_local_sids | sed 's/[0-9]$//'); do
   export DB_NAME
   echo srvctl stop database -d $DB_NAME -o immediate
