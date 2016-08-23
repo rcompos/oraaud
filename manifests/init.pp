@@ -1,4 +1,3 @@
-
 # == Class: oraaud
 class oraaud (
   String $dir_src          = ::oraaud::params::dir_src,
