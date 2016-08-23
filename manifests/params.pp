@@ -1,20 +1,17 @@
-# == Class ora_audit::params
-#
-# This class is meant to be called from ora_audit.
-# It sets variables according to platform.
-#
-class ora_audit::params {
-  case $::osfamily {
-    'Debian': {
-      $package_name = 'ora_audit'
-      $service_name = 'ora_audit'
-    }
-    'RedHat', 'Amazon': {
-      $package_name = 'ora_audit'
-      $service_name = 'ora_audit'
-    }
-    default: {
-      fail("${::operatingsystem} not supported")
-    }
-  }
+
+class oraaud::params {
+  # dir_src             : path to install files
+  $dir_src              = '/fslink/sysinfra/oracle/scripts/misc/auditing'
+  $dir_audit            = '/home/oracle/system/audit'
+  $script_audit         = 'install_ora_audit.sh'
+  $script_compare       = 'version_compare.sh'
+  $script_cycle_db      = 'cycle_db.sh'
+  $script_marker_rm     = 'marker_rm.sh'
+  $file_tar             = 'rn-ora_audit_nitc.tar'
+  $path_default         = '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin'
+  $expect_package       = 'expect'
+  $expect_ensure        = 'present'
+  $db_user              = 'oracle'
+  $db_group             = 'oinstall'
+  $scp_pw               = undef
 }

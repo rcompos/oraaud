@@ -1,24 +1,26 @@
-# Class: ora_audit
-# ===========================
-#
-# Full description of class ora_audit here.
-#
-# Parameters
-# ----------
-#
-# * `sample parameter`
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-class ora_audit (
-  $package_name = $::ora_audit::params::package_name,
-  $service_name = $::ora_audit::params::service_name,
-) inherits ::ora_audit::params {
 
-  # validate parameters here
+# == Class: oraaud
+class oraaud (
+  String $dir_src          = ::oraaud::params::dir_src,
+  String $dir_audit        = ::oraaud::params::dir_audit,
+  String $script_audit     = ::oraaud::params::script_audit,
+  String $script_compare   = ::oraaud::params::script_compare,
+  String $script_cycle_db  = ::oraaud::params::script_cycle_db,
+  String $script_marker_rm = ::oraaud::params::script_marker_rm,
+  String $file_tar         = ::oraaud::params::file_tar,
+  String $path_default     = ::oraaud::params::path_default,
+  String $expect_package   = ::oraaud::params::expect_package,
+  String $expect_ensure    = ::oraaud::params::expect_ensure,
+  String $db_user          = ::oraaud::params::db_user,
+  String $db_group         = ::oraaud::params::db_group,
+  Optional[String] $scp_pw = ::oraaud::params::scp_pw,
 
-  class { '::ora_audit::install': } ->
-  class { '::ora_audit::config': } ~>
-  class { '::ora_audit::service': } ->
-  Class['::ora_audit']
+) inherits ::oraaud::params {
+
+  anchor { 'oraaud::begin': }     ->
+  class  { '::oraaud::prereq': }  ->
+  class  { '::oraaud::install': } ->
+  class  { '::oraaud::service': } ->
+  anchor { 'oraaud::end': }
+
 }
