@@ -9,8 +9,4 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
-<<<<<<< HEAD
-include ::ora_audit
-=======
-include oraaud
->>>>>>> 604d1f88e27fb95e46233c6a73566fd8860f6f28
+include ::oraaud
