@@ -1,4 +1,4 @@
-class oraaud::prereq {
+class ::oraaud::prereq {
 
   package { $::oraaud::expect_package:
     ensure => $::oraaud::expect_ensure,

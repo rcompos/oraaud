@@ -1,5 +1,5 @@
-
-class oraaud::install {
+# Awesome oracle auditing
+class ::oraaud::install {
 
   #   case $::osfamily {
   #   'RedHat': {
