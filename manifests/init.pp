@@ -16,9 +16,9 @@ class oraaud (
 ) {
 
   anchor { 'oraaud::begin': }     ->
-  class  { '::oraaud::prereq': }  ->
-  class  { '::oraaud::install': } ->
-  class  { '::oraaud::service': } ->
+  class  { 'oraaud::prereq': }    ->
+  class  { 'oraaud::install': }   ->
+  class  { 'oraaud::service': }   ->
   anchor { 'oraaud::end': }
 
 }

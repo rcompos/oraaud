@@ -1,5 +1,5 @@
 
-class ::oraaud::service {
+class oraaud::service {
 
   exec {'service_config':
     command => '/home/oracle/system/audit/config_oraaud_OS_service.sh',
