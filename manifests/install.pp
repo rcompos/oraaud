@@ -1,4 +1,4 @@
-
+# Awesome oracle auditing
 class oraaud::install {
 
   #   case $::osfamily {
