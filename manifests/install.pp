@@ -24,8 +24,9 @@ class oraaud::install {
   notify { "\$scp_pw: ${::oraaud::scp_pw}": }
   exec {'install_audit':
     command     => "${::oraaud::dir_audit}/${::oraaud::script_audit}",
-    #path        => "/home/oracle/system/audit",
-    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:${::oraaud::dir_audit}",
+    cwd         => "/home/oracle/system/audit",
+    #path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:${::oraaud::dir_audit}",
+    path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/home/oracle/system/audit",
     user        => $::oraaud::db_user,
     #refreshonly => true,
     environment => ["SCP_PW=${::oraaud::scp_pw}"],
