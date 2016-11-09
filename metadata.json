@@ -1,7 +1,7 @@
 {
 
   "name": "rcompos-oraaud",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "author": "rcompos",
   "summary": "Oracle database auditing",
   "license": "Apache-2.0",
