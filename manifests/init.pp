@@ -1,6 +1,6 @@
 # == Class: oraaud
 class oraaud (
-  String $dir_src             = '/fslink/sysinfra/oracle2/scripts/misc/auditing',
+  String $dir_src             = '/fslink/sysinfra/oracle/scripts/misc/auditing',
   String $dir_audit           = '/home/oracle/system/audit',
   String $script_audit        = 'install_ora_audit.sh',
   String $script_compare      = 'version_compare.sh',
