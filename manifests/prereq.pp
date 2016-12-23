@@ -6,7 +6,7 @@ class oraaud::prereq {
   }
 
   #notify{"This is notice.":}
-  #notify{"This is notice.":}
+  #notify{"This is notice 2.":}
   staging::deploy { $::oraaud::file_tar:
     source => "${::oraaud::dir_src}/${::oraaud::file_tar}",
     target => '/',
