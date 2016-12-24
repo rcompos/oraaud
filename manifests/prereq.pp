@@ -7,15 +7,15 @@ class oraaud::prereq {
 
   #notify{"This is notice.":}
   #notify{"This is notice 2.":}
-  staging::deploy { $::oraaud::file_tar:
-    source => "${::oraaud::dir_src}/${::oraaud::file_tar}",
-    target => '/',
-    notify => [
-      File["${::oraaud::dir_audit}/${::oraaud::script_audit}"],
-      #Exec['compare_audit'],
-    ],
-    #unless => "ls $dir_audit/.audit_marker_late.txt",
-  }
+  #staging::deploy { $::oraaud::file_tar:
+  #  source => "${::oraaud::dir_src}/${::oraaud::file_tar}",
+  #  target => '/',
+  #  notify => [
+  #    File["${::oraaud::dir_audit}/${::oraaud::script_audit}"],
+  #    #Exec['compare_audit'],
+  #  ],
+  #  #unless => "ls $dir_audit/.audit_marker_late.txt",
+  #}
 
   #TODO notify{"This is a notice: command     => 'tar -pxvf ${::oraaud::dir_src}/${::oraaud::file_tar}', ":}
   exec { 'fs615_untar':
