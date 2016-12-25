@@ -1,12 +1,21 @@
 #!/bin/bash
 
-set -x
-. /home/oracle/.bash_profile
+touch /home/oracle/system/audit/.audit/install_ora_audit.sh || exit 1
 
-for DB_NAME in $(/tmp/usfs_local_sids | sed 's/[0-9]$//'); do
-  export DB_NAME
-  echo srvctl stop database -d $DB_NAME -o immediate
-  srvctl stop database -d $DB_NAME -o immediate
-  echo srvctl start database -d $DB_NAME
-  srvctl start database -d $DB_NAME
-done 2>&1 | tee -a /home/oracle/system/audit/.audit/install_ora_audit.sh
+LOG=/home/oracle/system/audit/.audit/install_ora_audit.sh
+{
+   set -x
+   . /home/oracle/.bash_profile
+
+   for ORACLE_SID in $(/fslink/sysinfra/oracle/common/db/usfs_local_sids); do
+      set -x
+      export ORACLE_SID;
+      echo "ORACLE_SID=$ORACLE_SID";
+      echo "shutdown immediate" | sqlplus -s / as sysdba;
+      echo "shutdown abort" | sqlplus -s / as sysdba;
+      echo "Startup:";
+      echo "startup" | sqlplus -s / as sysdba;
+      echo
+   done
+} 2>&1 | tee -a /home/oracle/system/audit/.audit/install_ora_audit.sh
+
