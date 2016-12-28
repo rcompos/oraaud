@@ -1,3 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env ksh
 
-for DB_NAME in $(/home/oracle/system/usfs_local_sids | sed \'s/[0-9]$//\'); do export DB_NAME; echo srvctl stop database -d $DB_NAME -o immediate; srvctl stop database -d $DB_NAME -o immediate; echo srvctl start database -d $DB_NAME; srvctl start database -d $D  B_NAME; done
+export Script_name=$(basename $0)
+touch /home/oracle/system/audit/.audit/install_ora_audit.sh || exit 1
+export LOG=/home/oracle/system/audit/.audit/install_ora_audit.sh.log
+
+{
+   function ECHO {
+      echo -e "$(date "+%Y-%m-%d:%H:%M:%S")-$Script_name: \c" >> $LOG
+      echo "$*"
+   }
+
+   alias shopt=': '; UID=$(id | sed 's|(.*||;s|.*=||'); . /home/oracle/.bash_profile
+   for ORACLE_SID in $(/fslink/sysinfra/oracle/common/db/usfs_local_sids); do
+      ECHO "$(date) ========================================================================"
+      export ORACLE_SID;
+      ECHO "ORACLE_SID=$ORACLE_SID";
+      ECHO "shutdown immediate" | sqlplus -s / as sysdba;
+      ECHO "shutdown abort" | sqlplus -s / as sysdba;
+      ECHO "Startup:";
+      ECHO "startup" | sqlplus -s / as sysdba;
+      ECHO
+   done
+} 2>&1 | tee -a $LOG
