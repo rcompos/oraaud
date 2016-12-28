@@ -9,7 +9,7 @@ class oraaud::service {
   }
 
   exec {'cycle_db':
-    command     => '/bin/hostname',
+    command     => "${::oraaud::dir_audit}/${::oraaud::script_cycle_db}",
     path        => "${::oraaud::path_default}:${::oraaud::dir_audit}",
     refreshonly => false,
     user        => $::oraaud::db_user,
