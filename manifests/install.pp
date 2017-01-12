@@ -1,7 +1,7 @@
 # Awesome oracle auditing
 class oraaud::install {
 
-  #   case $::osfamily {
+  # case $::osfamily {
   #   'RedHat': {
   #      if $::operatingsystemmajrelease + 0 >= 8 {
   #        fail("Class['oraaud::install']: Unsupported operating system majrelease ${::operatingsystemmajrelease}")
@@ -21,7 +21,7 @@ class oraaud::install {
   #  notify      => Exec['install_audit'],
   #}
 
-  notify { "\$scp_pw: ${::oraaud::scp_pw}": }
+  #notify { "\$scp_pw: ${::oraaud::scp_pw}": }
   exec {'install_audit':
     command     => "${::oraaud::dir_audit}/${::oraaud::script_audit}",
     cwd         => "/home/oracle/system/audit",
