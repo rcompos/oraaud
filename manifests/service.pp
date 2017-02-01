@@ -13,7 +13,7 @@ class oraaud::service {
     path        => "${::oraaud::path_default}:${::oraaud::dir_audit}",
     refreshonly => false,
     user        => $::oraaud::db_user,
-    # Search databases with audit_trail=NONE
+    # Only execute cycle_db.sh if the RPM was applied within the last 10 minutes.
     onlyif      => 'ksh " {
          set -x;
          echo == BEGIN Puppet install class, cycle_db exec ==;
