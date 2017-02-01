@@ -12,3 +12,4 @@
 /log
 .yardoc
 coverage
+prereq.pp.*
