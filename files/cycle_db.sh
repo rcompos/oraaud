@@ -12,6 +12,7 @@ export LOG_2=/var/tmp/cycle_db.sh.log
    }
 
    alias shopt=': '; UID=$(id | sed 's|(.*||;s|.*=||'); . /home/oracle/.bash_profile
+set -x
    for ORACLE_SID in $(/fslink/sysinfra/oracle/common/db/usfs_local_sids); do
       ECHO "$(date) ========================================================================"
       export ORACLE_SID;
@@ -22,13 +23,13 @@ export LOG_2=/var/tmp/cycle_db.sh.log
          exit 1
       fi
 
-      ECHO show parameter audit_trail | sqlplus -s / as sysdba 2>&1 | tee $LOG_2.$ORACLE_SID;
-      if ! grep ^audit_trail.*string.*NONE $LOG_2.$ORACLE_SID; then
-         ECHO ".. Didn't find 'audit_trail NONE', therefore not restarting the database"
+      echo show parameter audit_sys_operations | sqlplus -s / as sysdba 2>&1 | tee $LOG_2.$ORACLE_SID;
+      if ! grep ^audit_sys_operations.*boolean.*FALSE $LOG_2.$ORACLE_SID; then
+         ECHO ".. Didn't find 'audit_sys_operations FALSE', therefore not restarting the database"
          ECHO
          continue
       fi
-      ECHO ".. Found 'audit_trail NONE', restarting the database now"
+      ECHO ".. Found 'audit_sys_operations FALSE', restarting the database now"
       ECHO "shutdown immediate" | sqlplus -s / as sysdba;
       ECHO "shutdown abort" | sqlplus -s / as sysdba;
       ECHO "Startup:";
