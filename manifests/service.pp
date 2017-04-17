@@ -17,6 +17,7 @@ class oraaud::service {
     onlyif      => 'ksh " {
          set -x;
          echo == BEGIN Puppet install class, cycle_db exec ==;
+         id;
          rm -f /var/tmp/fs615_oraaud.log
          RPM_APPLIED_DATE=\$(rpm -q --last rn-ora_audit_nitc | sed \"s/rn-ora_audit_nitc[^ ]* *//\" ); 
          if [[ -n \$RPM_APPLIED_DATE ]]; then
@@ -29,7 +30,8 @@ class oraaud::service {
             echo == END Puppet install class, cycle_db exec ==;
          fi
       } 2>&1 | tee -a /home/oracle/system/audit/.audit/install_ora_audit.sh.log
-      seconds_since_rpm_applied=$(cat /var/tmp/fs615_oraaud.log)
+      seconds_since_rpm_applied=\$(cat /var/tmp/fs615_oraaud.log)
+      echo outside_seconds_since_rpm_applied=\$seconds_since_rpm_applied >> /home/oracle/system/audit/.audit/install_ora_audit.sh.log
       ((10<seconds_since_rpm_applied && seconds_since_rpm_applied<600))" ',
     notify      => Exec['marker_rm'],
     #subscribe   => File["$dir_audit/$script_cycle_db"],
