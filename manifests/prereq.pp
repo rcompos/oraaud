@@ -9,6 +9,7 @@ class oraaud::prereq {
      provider => 'rpm',
      ensure   => 'present',
      source   => "${::oraaud::dir_src}/${::oraaud::file_rpm}",
+     notify   => Exec['install_audit'],
   }
 
   file { "${::oraaud::dir_audit}/${::oraaud::script_marker_rm}":

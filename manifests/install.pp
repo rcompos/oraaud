@@ -28,7 +28,7 @@ class oraaud::install {
     #path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:${::oraaud::dir_audit}",
     path        => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/home/oracle/system/audit",
     user        => $::oraaud::db_user,
-    #refreshonly => true,
+    refreshonly => true,
     environment => ["SCP_PW=${::oraaud::scp_pw}"],
   }
 }
